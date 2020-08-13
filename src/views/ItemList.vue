@@ -1,5 +1,16 @@
 <template>
   <div class="news-view">
+    <div class="news-list-nav">
+      <router-link v-if="page > 1" :to="'/' + type + '/' + (page - 1)"
+        >&lt; prev</router-link
+      >
+      <a v-else class="disabled">&lt; prev</a>
+      <span>{{ page }}/{{ totalPage }}</span>
+      <router-link v-if="page < totalPage" :to="'/' + type + '/' + (page + 1)"
+        >more &gt;</router-link
+      >
+      <a v-else class="disabled">more &gt;</a>
+    </div>
     <transition :name="transition">
       <div class="news-list">
         <transition-group tag="ul" name="item">
@@ -17,6 +28,9 @@
 <script>
 import Item from "../components/Item.vue"
 import api from "../api"
+
+const perPage = 20
+
 export default {
   name: "item-list",
   components: {
@@ -38,8 +52,20 @@ export default {
     }
   },
   computed: {
+    totalPage() {
+      return Math.ceil(this.itemsId.length / perPage)
+    },
     displayedItems() {
-      return this.itemsId.slice(0, 10).map(v => ({ id: v }))
+      const start = perPage * this.page
+      const end = start + perPage
+      return this.itemsId.slice(start, end).map(v => ({ id: v }))
+    },
+    page() {
+      if (this.totalPage > 0) {
+        return Number(this.$route.params.page) || 1
+      } else {
+        return 0
+      }
     }
   }
 }

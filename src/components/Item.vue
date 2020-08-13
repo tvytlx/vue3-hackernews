@@ -1,5 +1,7 @@
 <template>
-  <div>{{ doc.title }}</div>
+  <div>
+    <a :href="doc.url">{{ doc.title }}</a>
+  </div>
 </template>
 <script>
 import api from "../api"
