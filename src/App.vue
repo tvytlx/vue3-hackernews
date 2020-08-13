@@ -15,7 +15,8 @@
           href="https://github.com/tvytlx/vue3-hackernews"
           target="_blank"
           rel="noopener"
-        >Built with Vue.js</a>
+          >Built with Vue.js</a
+        >
       </nav>
     </header>
     <router-view class="view" v-slot="{ Component }">

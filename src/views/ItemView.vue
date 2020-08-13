@@ -1,6 +1,23 @@
-<template><div>123123</div> </template>
+<template>
+  <div>{doc.id}</div>
+</template>
 <script>
+import api from "../api"
+
 export default {
-  name: "Item"
+  name: "item-view",
+  data() {
+    return {
+      doc: {}
+    }
+  },
+  props: {
+    id: Number
+  },
+  mounted() {
+    api(`item/${this.id}`)
+      .then(resp => resp.json())
+      .then(data => (this.doc = data))
+  }
 }
 </script>

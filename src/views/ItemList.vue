@@ -3,7 +3,11 @@
     <transition :name="transition">
       <div class="news-list">
         <transition-group tag="ul" name="item">
-          <item v-for="item in displayedItems" :key="item.id"></item>
+          <item
+            v-for="item in displayedItems"
+            :key="item.id"
+            :id="item.id"
+          ></item>
         </transition-group>
       </div>
     </transition>
@@ -25,17 +29,17 @@ export default {
     // initial
     api(`${this.type}stories`)
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => (this.itemsId = data))
   },
   data() {
     return {
       transition: "slide-right",
-      items: []
+      itemsId: []
     }
   },
   computed: {
     displayedItems() {
-      return [(1, 2, 3)].map(v => ({ id: v }))
+      return this.itemsId.slice(0, 10).map(v => ({ id: v }))
     }
   }
 }
