@@ -21,9 +21,7 @@
     </header>
     <router-view class="view" v-slot="{ Component }">
       <transition>
-        <keep-alive>
-          <component :is="Component"></component>
-        </keep-alive>
+        <component :is="Component"></component>
       </transition>
     </router-view>
   </div>
