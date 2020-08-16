@@ -4,7 +4,7 @@
     <span class="title">
       <template v-if="item.url">
         <a :href="item.url" target="_blank" rel="noopener">{{ item.title }}</a>
-        <span class="host"> ({{ item.url }})</span>
+        <span class="host"> ({{ util.host(item.url) }})</span>
       </template>
       <template v-else>
         <router-link :to="'/item/' + item.id">{{ item.title }}</router-link>
@@ -29,6 +29,7 @@
 
 <script>
 import api from "../api"
+import * as util from "../util"
 
 export default {
   name: "news-item",
@@ -36,6 +37,9 @@ export default {
     return {
       item: { id: this.id }
     }
+  },
+  setup() {
+    return { util }
   },
   props: {
     id: Number

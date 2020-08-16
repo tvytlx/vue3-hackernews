@@ -40,10 +40,12 @@ export default {
     type: String
   },
   mounted() {
-    // initial
-    api(`${this.type}stories`)
-      .then(response => response.json())
-      .then(data => (this.itemsId = data))
+    // initial, refresh every 5 s
+    setInterval(() => {
+      api(`${this.type}stories`)
+        .then(response => response.json())
+        .then(data => (this.itemsId = data))
+    }, 5000)
   },
   data() {
     return {
