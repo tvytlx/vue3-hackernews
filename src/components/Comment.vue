@@ -2,7 +2,7 @@
   <li v-if="comment" class="comment">
     <div class="by">
       <router-link :to="'/user/' + comment.by">{{ comment.by }}</router-link>
-      {{ comment.time }} ago
+      {{ util.timeAgo(comment.time) }} ago
     </div>
     <div class="text" v-html="comment.text"></div>
     <div
@@ -28,9 +28,14 @@
 </template>
 
 <script>
+import * as util from "../util"
+
 export default {
   name: "comment",
   props: ["comment", "id"],
+  setup() {
+    return { util }
+  },
   data() {
     return {
       open: true

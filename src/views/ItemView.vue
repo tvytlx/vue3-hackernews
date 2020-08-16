@@ -9,7 +9,7 @@
         <p class="meta">
           {{ item.score }} points | by
           <router-link :to="'/user/' + item.by">{{ item.by }}</router-link>
-          {{ item.time }} ago
+          {{ util.timeAgo(item.time) }} ago
         </p>
       </div>
       <div class="item-view-comments">
@@ -30,6 +30,7 @@
   </div>
 </template>
 <script>
+import * as util from "../util"
 import api from "../api"
 import Spinner from "../components/Spinner.vue"
 import Comment from "../components/Comment.vue"
@@ -43,6 +44,9 @@ export default {
       item: {},
       comments: []
     }
+  },
+  setup() {
+    return { util }
   },
   beforeMount() {
     // fetch a story
