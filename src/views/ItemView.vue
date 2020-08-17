@@ -19,7 +19,7 @@
         </p>
         <ul v-if="!loading" class="comment-children">
           <comment
-            v-for="comment in comments"
+            v-for="comment in item.comments"
             :key="comment.id"
             :id="comment.id"
             :comment="comment"
@@ -41,42 +41,30 @@ export default {
   data() {
     return {
       loading: true,
-      item: {},
-      comments: []
+      item: {}
     }
   },
   setup() {
     return { util }
   },
   beforeMount() {
-    // fetch a story
-    api(`item/${this.$route.params.id}`)
-      .then(resp => resp.json())
-      .then(data => {
-        this.item = data
-        // fetch all comments of this story, include children comments
-        function recurFetchComments(commentId) {
-          return api(`item/${commentId}`)
-            .then(resp => resp.json())
-            .then(comment => {
-              if (comment.kids) {
-                return Promise.all(
-                  comment.kids.map(id => recurFetchComments(id))
-                ).then(comments => {
-                  comment.comments = comments
-                  return comment
-                })
-              } else {
-                comment.comments = []
-                return comment
-              }
-            })
-        }
-        recurFetchComments(this.item.id).then(data => {
-          this.comments = data.comments
-          this.loading = false
+    // fetch a story and all it's comments, include children comments
+    function recurFetchComments(commentId) {
+      return api(`item/${commentId}`)
+        .then(resp => resp.json())
+        .then(comment => {
+          return Promise.all(
+            (comment.kids || []).map(id => recurFetchComments(id))
+          ).then(comments => {
+            comment.comments = comments
+            return comment
+          })
         })
-      })
+    }
+    recurFetchComments(this.$route.params.id).then(data => {
+      this.item = data
+      this.loading = false
+    })
   }
 }
 </script>
