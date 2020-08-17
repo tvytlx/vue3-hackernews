@@ -15,9 +15,10 @@
       <div class="news-list">
         <transition-group tag="ul" name="item">
           <item
-            v-for="item in displayedItems"
-            :key="item.id"
-            :id="item.id"
+            v-for="id in displayedItems"
+            :key="id"
+            :id="id"
+            @delete-item="deleteEmpty(id)"
           ></item>
         </transition-group>
       </div>
@@ -41,16 +42,25 @@ export default {
   },
   mounted() {
     // initial, refresh every 5 s
-    setInterval(() => {
+    this.interval = setInterval(() => {
       api(`${this.type}stories`)
         .then(response => response.json())
         .then(data => (this.itemsId = data))
     }, 5000)
   },
+  unmounted() {
+    clearInterval(this.interval)
+  },
   data() {
     return {
       transition: "slide-right",
-      itemsId: []
+      itemsId: [],
+      deletedItemsId: new Set()
+    }
+  },
+  methods: {
+    deleteEmpty(id) {
+      this.deletedItemsId.add(id)
     }
   },
   computed: {
@@ -58,16 +68,19 @@ export default {
       return Math.ceil(this.itemsId.length / perPage)
     },
     displayedItems() {
-      const start = perPage * this.page
+      const start = perPage * (this.page - 1)
       const end = start + perPage
-      return this.itemsId.slice(start, end).map(v => ({ id: v }))
+      const ids = this.itemsId
+        .slice(start, end)
+        .filter(v => !this.deletedItemsId.has(v))
+      // remove deleted items
+      const compensateNum = perPage - ids.length
+      ids.push(...this.itemsId.slice(end, end + compensateNum))
+      console.log(this.deletedItemsId, ids)
+      return ids
     },
     page() {
-      if (this.totalPage > 0) {
-        return Number(this.$route.params.page) || 1
-      } else {
-        return 0
-      }
+      return Number(this.$route.params.page || 1)
     }
   }
 }

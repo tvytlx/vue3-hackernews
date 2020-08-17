@@ -15,7 +15,7 @@
       <span v-if="item.type !== 'job'" class="by">
         by <router-link :to="'/user/' + item.by">{{ item.by }}</router-link>
       </span>
-      <span class="time"> {{ item.time }} ago </span>
+      <span class="time"> {{ util.timeAgo(item.time) }} ago </span>
       <span v-if="item.type !== 'job'" class="comments-link">
         |
         <router-link :to="'/item/' + item.id"
@@ -44,11 +44,15 @@ export default {
   props: {
     id: Number
   },
-  beforeMount() {
+  beforeCreate() {
     api(`item/${this.id}`)
       .then(resp => resp.json())
       .then(data => {
-        this.item = data
+        if (data == null) {
+          this.$emit("delete-item")
+        } else {
+          this.item = data
+        }
       })
   }
 }
