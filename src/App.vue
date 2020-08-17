@@ -15,7 +15,7 @@
           href="https://github.com/tvytlx/vue3-hackernews"
           target="_blank"
           rel="noopener"
-          >Built with Vue.js</a
+          >Built with Vue3</a
         >
       </nav>
     </header>
