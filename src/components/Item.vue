@@ -4,7 +4,7 @@
     <span class="title">
       <template v-if="item.url">
         <a :href="item.url" target="_blank" rel="noopener">{{ item.title }}</a>
-        <span class="host"> ({{ util.host(item.url) }})</span>
+        <span class="host">({{ util.host(item.url) }})</span>
       </template>
       <template v-else>
         <router-link :to="'/item/' + item.id">{{ item.title }}</router-link>
@@ -13,9 +13,10 @@
     <br />
     <span class="meta">
       <span v-if="item.type !== 'job'" class="by">
-        by <router-link :to="'/user/' + item.by">{{ item.by }}</router-link>
+        by
+        <router-link :to="'/user/' + item.by">{{ item.by }}</router-link>
       </span>
-      <span class="time"> {{ util.timeAgo(item.time) }} ago </span>
+      <span class="time">{{ " " + util.timeAgo(item.time) }} ago</span>
       <span v-if="item.type !== 'job'" class="comments-link">
         |
         <router-link :to="'/item/' + item.id"

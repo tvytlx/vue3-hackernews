@@ -20,7 +20,7 @@
       </nav>
     </header>
     <router-view class="view" v-slot="{ Component }">
-      <transition>
+      <transition name="fade" mode="out-in">
         <component :is="Component"></component>
       </transition>
     </router-view>
