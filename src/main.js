@@ -7,8 +7,6 @@ import { createRouter, createWebHistory } from "vue-router"
 
 const router = createRouter({
   history: createWebHistory(),
-  fallback: false,
-  scrollBehavior: () => ({ y: 0 }),
   routes: [
     { path: "/top/:page(\\d+)?", component: createListView("top") },
     { path: "/new/:page(\\d+)?", component: createListView("new") },

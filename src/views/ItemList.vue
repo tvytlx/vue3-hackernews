@@ -76,7 +76,6 @@ export default {
       // remove deleted items
       const compensateNum = perPage - ids.length
       ids.push(...this.itemsId.slice(end, end + compensateNum))
-      console.log(this.deletedItemsId, ids)
       return ids
     },
     page() {
