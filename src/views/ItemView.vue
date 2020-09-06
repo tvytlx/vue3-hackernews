@@ -49,17 +49,14 @@ export default {
   },
   beforeMount() {
     // fetch a story and all it's comments, include children comments
-    function recurFetchComments(commentId) {
-      return api(`item/${commentId}`)
-        .then(resp => resp.json())
-        .then(comment => {
-          return Promise.all(
-            (comment.kids || []).map(id => recurFetchComments(id))
-          ).then(comments => {
-            comment.comments = comments
-            return comment
-          })
-        })
+    async function recurFetchComments(commentId) {
+      let resp = await api(`item/${commentId}`)
+      let comment = await resp.json()
+      let comments = await Promise.all(
+        (comment.kids || []).map(id => recurFetchComments(id))
+      )
+      comment.comments = comments
+      return comment
     }
     recurFetchComments(this.$route.params.id).then(data => {
       this.item = data
